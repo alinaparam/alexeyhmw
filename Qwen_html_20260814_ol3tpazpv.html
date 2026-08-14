@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Домашняя работа для Алексея</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Nunito:wght@400;600;700;800&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#F3EFE9;
+    --card:#FBF8F3;
+    --paper:#FFFDF9;
+    --accent:#C97B5B;
+    --accent-dark:#A85D3F;
+    --accent-soft:#F3E2D7;
+    --ink:#3A3532;
+    --muted:#6B625C;
+    --line:#D9CFC2;
+    --ok:#A9BFA0;      --ok-soft:#EDF3E8;   --ok-ink:#5F7A52;
+    --warn:#E8C989;    --warn-soft:#F7EDD6; --warn-ink:#8A6A2F;
+    --bad:#D98B7A;     --bad-soft:#F6E3DD;  --bad-ink:#A25A47;
+    --font-head:'Playfair Display', Georgia, 'Times New Roman', serif;
+    --font-body:'Nunito', 'DejaVu Sans', Verdana, sans-serif;
+    --font-hand:'Caveat', cursive;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; }
+
+  body{
+    font-family:var(--font-body);
+    font-size:16.5px; line-height:1.6;
+    color:var(--ink);
+    background:var(--bg);
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  ::selection{ background:var(--accent-soft); color:var(--accent-dark); }
+
+  /* ---------- фон: фото + бежевый фейд ---------- */
+  .bg-layer{ position:fixed; inset:0; z-index:-2; background:#F3EFE9 url('photo.jpg') center / cover no-repeat; }
+  .bg-overlay{
+    position:fixed; inset:0; z-index:-1;
+    background:linear-gradient(180deg,
+      rgba(243,239,233,.97) 0%,
+      rgba(243,239,233,.86) 26%,
+      rgba(243,239,233,.82) 55%,
+      rgba(243,239,233,.95) 100%);
+  }
+
+  .container{ max-width:980px; margin:0 auto; padding:40px 20px 30px; display:flex; flex-direction:column; gap:30px; }
+
+  .card{ background:var(--card); border:1px solid var(--line); border-radius:22px; padding:32px; }
+  .hidden{ display:none !important; }
+
+  h1,h2,h3{ font-family:var(--font-head); line-height:1.2; }
+  button{ font-family:inherit; }
+  button:focus-visible, .mem-card:focus-visible, input:focus-visible{ outline:2px solid var(--accent-dark); outline-offset:3px; }
+
+  .hand{ font-family:var(--font-hand); color:var(--accent-dark); font-size:1.45rem; line-height:1.1; }
+
+  .reveal{ opacity:0; transform:translateY(22px); transition:opacity .7s ease, transform .7s ease; }
+  .reveal.in{ opacity:1; transform:none; }
+
+  /* ================= ШАПКА ================= */
+  .cover{ position:relative; overflow:hidden; display:flex; flex-direction:column; gap:16px; padding:40px 36px; }
+
+  .doodle{ position:absolute; color:var(--accent); pointer-events:none; }
+  .d-bulb{ width:104px; top:-8px; right:30px; opacity:.30; transform:rotate(9deg); animation:floaty 7s ease-in-out infinite; }
+  .d-mountain{ width:118px; right:200px; bottom:-20px; opacity:.20; animation:floaty 8s ease-in-out 1s infinite; }
+  .d-sun{ width:72px; left:-8px; bottom:-14px; opacity:.35; animation:floaty 9s ease-in-out .5s infinite reverse; }
+  @keyframes floaty{ 0%,100%{ translate:0 0; } 50%{ translate:0 -9px; } }
+
+  .cover-top{ display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+  .tag{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:.78rem; font-weight:800; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--accent-dark);
+    border:1px solid #E4C5B2; background:var(--accent-soft);
+    padding:7px 15px; border-radius:99px;
+  }
+  .tag svg{ width:14px; height:14px; }
+  .date{ font-family:var(--font-hand); font-size:1.35rem; color:var(--muted); transform:rotate(-1.5deg); }
+
+  .cover h1{ font-size:clamp(2.4rem, 5.5vw, 3.7rem); font-weight:600; letter-spacing:-.01em; }
+  .squiggle{ display:block; margin-top:2px; }
+  .for-note{
+    display:inline-block; font-family:var(--font-hand);
+    font-size:clamp(1.7rem, 3.4vw, 2.3rem); font-weight:700;
+    color:var(--accent); transform:rotate(-3deg); margin-top:2px;
+  }
+  .lead{ max-width:680px; color:var(--muted); font-size:1.05rem; }
+  .lead b{ color:var(--ink); }
+
+  .chips{ display:flex; flex-wrap:wrap; gap:10px; margin-top:6px; }
+  .chip{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:8px 16px; border-radius:99px;
+    border:1px solid var(--line); background:var(--paper);
+    font-size:.88rem; font-weight:700; color:var(--muted);
+    transition:transform .2s ease, border-color .2s ease;
+  }
+  .chip:hover{ transform:translateY(-2px); border-color:var(--accent); }
+  .chip svg{ width:16px; height:16px; color:var(--accent); }
+
+  /* ================= ШАГИ ================= */
+  .steps{ display:flex; gap:16px; flex-wrap:wrap; }
+  .step{
+    flex:1 1 240px;
+    background:var(--card); border:1px solid var(--line); border-radius:18px;
+    padding:20px 22px; display:flex; gap:15px; align-items:flex-start;
+    transition:transform .25s ease, border-color .25s ease;
+  }
+  .step:hover{ transform:translateY(-3px); border-color:#E4C5B2; }
+  .step-ico{
+    flex:0 0 auto; width:46px; height:46px; border-radius:14px;
+    background:var(--accent-soft); border:1px solid #EAD3C3;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .step-ico svg{ width:23px; height:23px; color:var(--accent-dark); }
+  .step-over{ font-size:.72rem; font-weight:800; letter-spacing:.15em; text-transform:uppercase; color:var(--accent); }
+  .step h3{ font-size:1.16rem; margin:2px 0 4px; }
+  .step p{ font-size:.9rem; color:var(--muted); line-height:1.5; }
+
+  /* ================= БЛОКИ: ОБЩЕЕ ================= */
+  .block-head{
+    display:flex; align-items:flex-start; justify-content:space-between; gap:18px; flex-wrap:wrap;
+    border-bottom:1px dashed var(--line);
+    padding-bottom:20px; margin-bottom:24px;
+  }
+  .block-title-row{ display:flex; gap:16px; align-items:flex-start; }
+  .block-badge{
+    flex:0 0 auto; width:50px; height:50px; border-radius:16px;
+    background:var(--accent); border:1px solid var(--accent-dark); color:#FFF8F1;
+    font-family:var(--font-head); font-size:1.6rem; font-weight:700;
+    display:flex; align-items:center; justify-content:center;
+    transform:rotate(-4deg); transition:transform .25s ease;
+  }
+  .block:hover .block-badge{ transform:rotate(3deg) scale(1.05); }
+  .block-overline{ font-size:.72rem; font-weight:800; letter-spacing:.17em; text-transform:uppercase; color:var(--accent); }
+  .block h2{ font-size:1.7rem; font-weight:600; margin:2px 0 4px; }
+  .block-sub{ font-size:.95rem; color:var(--muted); max-width:560px; }
+
+  .head-chip{
+    display:inline-flex; align-items:center; gap:9px;
+    padding:10px 18px; border-radius:99px;
+    background:var(--accent-soft); border:1px solid #E4C5B2;
+    font-weight:800; font-size:1.02rem; color:var(--accent-dark);
+    font-variant-numeric:tabular-nums;
+  }
+  .head-chip svg{ width:17px; height:17px; }
+  .head-chip.low{ background:var(--bad-soft); border-color:#E5B4A6; color:var(--bad-ink); animation:pulse 1s ease infinite; }
+  @keyframes pulse{ 0%,100%{ transform:scale(1);} 50%{ transform:scale(1.05);} }
+
+  .start-screen{ display:flex; flex-direction:column; align-items:center; gap:14px; text-align:center; padding:36px 12px; }
+  .start-ico{
+    width:76px; height:76px; border-radius:50%;
+    background:var(--accent-soft); border:1px dashed #DEB79E;
+    display:flex; align-items:center; justify-content:center;
+    animation:floaty 5s ease-in-out infinite;
+  }
+  .start-ico svg{ width:36px; height:36px; color:var(--accent-dark); }
+  .start-screen .note{ color:var(--muted); font-size:.98rem; }
+
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:10px;
+    border:none; cursor:pointer; font-weight:800; font-size:1rem;
+    border-radius:99px; padding:13px 30px;
+    transition:transform .18s ease, background .2s ease, border-color .2s ease;
+  }
+  .btn svg{ width:18px; height:18px; }
+  .btn:hover{ transform:translateY(-2px); }
+  .btn:active{ transform:translateY(1px) scale(.98); }
+  .btn-primary{ background:var(--accent); color:#FFF8F1; border:1px solid var(--accent-dark); }
+  .btn-primary:hover{ background:var(--accent-dark); }
+
+  /* ================= БЛОК 1: MEMORY ================= */
+  .mem-stats{ display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin-bottom:20px; font-size:.95rem; color:var(--muted); }
+  .mem-stats b{ color:var(--accent-dark); font-size:1.05rem; }
+  .mini-track{ flex:1; min-width:140px; height:9px; border-radius:99px; background:#EFE5D5; border:1px solid var(--line); overflow:hidden; display:flex; }
+  .mini-fill{ height:100%; width:0%; background:linear-gradient(90deg, var(--accent), var(--accent-dark)); border-radius:99px; transition:width .45s ease; }
+
+  .mem-grid{ display:flex; flex-wrap:wrap; gap:14px; }
+  .mem-card{
+    flex:0 0 calc(25% - 10.5px);
+    height:152px;
+    perspective:900px; cursor:pointer; position:relative;
+    transition:transform .2s ease;
+  }
+  .mem-card:not(.matched):hover{ transform:translateY(-3px); }
+  @media (max-width:900px){ .mem-card{ flex:0 0 calc(33.333% - 9.4px); } }
+  @media (max-width:640px){
+    .mem-card{ flex:0 0 calc(50% - 7px); height:188px; }
+    .mem-word.def{ font-size:.72rem !important; }
+  }
+
+  .mem-inner{ position:absolute; inset:0; transform-style:preserve-3d; transition:transform .55s cubic-bezier(.35,.15,.25,1); }
+  .mem-card.flipped .mem-inner, .mem-card.matched .mem-inner{ transform:rotateY(180deg); }
+
+  .mem-face{
+    position:absolute; inset:0;
+    backface-visibility:hidden; -webkit-backface-visibility:hidden;
+    border-radius:14px; border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center;
+    padding:10px 12px; text-align:center; overflow:hidden;
+  }
+  .mem-front{ background:linear-gradient(145deg, #F6E9DD, #F0DECE); border-color:#E6CDBB; }
+  .mem-front svg{ width:26px; height:26px; color:var(--accent); opacity:.55; }
+  .mem-back{ background:var(--paper); transform:rotateY(180deg); }
+  .mem-word{ line-height:1.35; }
+  .mem-word.en{ font-family:var(--font-head); font-style:italic; font-weight:600; font-size:1.12rem; color:var(--accent-dark); }
+  .mem-word.def{ font-size:.8rem; font-weight:600; color:var(--ink); }
+  .mem-back .dot{ position:absolute; top:8px; right:8px; width:7px; height:7px; border-radius:50%; }
+  .mem-back .dot.en{ background:var(--accent); }
+  .mem-back .dot.def{ background:var(--ok); }
+
+  .mem-card.matched .mem-back{ background:var(--ok-soft); border-color:#B9CBAF; }
+  .mem-card.matched{ animation:pop .5s ease; cursor:default; }
+  @keyframes pop{ 0%{ transform:scale(1);} 40%{ transform:scale(1.1);} 100%{ transform:scale(1);} }
+  .mem-card.shake{ animation:shake .4s ease; }
+  @keyframes shake{ 0%,100%{ translate:0 0;} 25%{ translate:-6px 0;} 55%{ translate:6px 0;} 80%{ translate:-3px 0;} }
+
+  /* ================= БЛОК 2: ШПАРГАЛКА ================= */
+  .cheat{ display:flex; gap:16px; flex-wrap:wrap; margin-bottom:8px; }
+  .cheat-col{
+    flex:1 1 320px; background:var(--paper); border:1px solid var(--line); border-radius:16px;
+    padding:18px 20px; display:flex; flex-direction:column; gap:9px;
+  }
+  .cheat-title{ font-size:.75rem; font-weight:800; letter-spacing:.15em; text-transform:uppercase; color:var(--accent-dark); }
+  .cheat-line{ display:flex; gap:10px; align-items:flex-start; font-size:.87rem; color:var(--muted); line-height:1.45; }
+  .cheat-line b{
+    flex:0 0 auto; font-family:var(--font-head); font-style:italic;
+    color:var(--accent-dark); background:var(--accent-soft);
+    border:1px solid #EAD3C3; border-radius:8px; padding:1px 9px; font-size:.85rem;
+  }
+  .cheat-line .ex{ color:var(--accent-dark); font-weight:700; }
+
+  /* ================= БЛОК 2: ИГРА ================= */
+  .g-top{ display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .step-chip{
+    font-size:.85rem; font-weight:800; color:var(--muted);
+    border:1px solid var(--line); background:var(--paper);
+    padding:7px 14px; border-radius:99px; font-variant-numeric:tabular-nums;
+  }
+  .task-chip{ display:inline-flex; align-items:center; gap:9px; padding:8px 16px; border-radius:99px; font-weight:800; font-size:.93rem; }
+  .task-chip svg{ width:16px; height:16px; }
+  .chip-prep{ background:var(--accent-soft); color:var(--accent-dark); border:1px solid #E4C5B2; }
+  .chip-plur{ background:var(--ok-soft); color:var(--ok-ink); border:1px solid #C4D4BB; }
+
+  .g-progress{ display:flex; margin:18px 0 6px; }
+
+  .sentence{
+    font-family:var(--font-head); font-weight:600;
+    font-size:clamp(1.5rem, 3.4vw, 2.15rem); line-height:1.4;
+    text-align:center; padding:22px 8px 18px;
+    display:flex; align-items:baseline; justify-content:center; flex-wrap:wrap; gap:10px;
+  }
+  .gap{ display:inline-block; width:78px; border-bottom:3px solid var(--accent); height:1.1em; }
+  .sing-word{ color:var(--accent-dark); font-style:italic; }
+  .arrow{ color:var(--accent); }
+
+  .time-row{ display:flex; align-items:center; gap:12px; max-width:560px; margin:4px auto 22px; }
+  .time-row > svg{ width:20px; height:20px; color:var(--accent-dark); }
+  .time-track{ flex:1; height:15px; border-radius:99px; background:#EFE5D5; border:1px solid var(--line); overflow:hidden; display:flex; }
+  .time-fill{ height:100%; width:100%; background:linear-gradient(90deg, #D18F70, var(--accent-dark)); border-radius:99px; transition:width .1s linear, background .4s ease; }
+  .time-fill.low{ background:linear-gradient(90deg, var(--bad), #C0604E); }
+  .time-sec{ font-weight:800; min-width:52px; text-align:right; font-variant-numeric:tabular-nums; color:var(--accent-dark); }
+  .time-sec.low{ color:var(--bad-ink); }
+
+  .g-center{ display:flex; flex-direction:column; align-items:center; gap:12px; }
+  .g-hint{ transform:rotate(-1.5deg); }
+
+  .prep-row{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+  .btn-prep{
+    min-width:104px; padding:13px 28px; cursor:pointer;
+    font-family:var(--font-head); font-style:italic; font-weight:700; font-size:1.25rem;
+    color:var(--ink); background:var(--paper);
+    border:1.5px solid var(--line); border-radius:14px;
+    transition:transform .15s ease, border-color .2s ease, background .2s ease;
+  }
+  .btn-prep:hover{ transform:translateY(-3px); border-color:var(--accent); background:var(--accent-soft); color:var(--accent-dark); }
+
+  .ans-row{ display:flex; gap:12px; justify-content:center; align-items:center; flex-wrap:wrap; }
+  .ans-input{
+    width:230px; padding:12px 16px;
+    font-family:var(--font-body); font-size:1.05rem; font-weight:700; color:var(--ink);
+    background:var(--paper); border:1.5px solid var(--line); border-radius:14px;
+    text-align:center; transition:border-color .2s ease;
+  }
+  .ans-input:focus{ border-color:var(--accent); outline:none; }
+  .ans-input:disabled{ opacity:.6; }
+
+  /* ---------- разбор ---------- */
+  .fb-wrap{ display:flex; flex-direction:column; align-items:center; gap:15px; text-align:center; }
+  .status-chip{ padding:8px 20px; border-radius:99px; font-weight:800; font-size:.95rem; border:1px solid; }
+  .status-chip.ok{ background:var(--ok-soft); border-color:#B9CBAF; color:var(--ok-ink); }
+  .status-chip.bad{ background:var(--bad-soft); border-color:#E5B4A6; color:var(--bad-ink); }
+  .status-chip.warn{ background:var(--warn-soft); border-color:#E7D5A9; color:var(--warn-ink); }
+  .fb-card{
+    display:flex; align-items:center; gap:14px; flex-wrap:wrap; justify-content:center;
+    background:var(--ok-soft); border:1px solid #B9CBAF; border-radius:16px;
+    padding:18px 28px; font-family:var(--font-head); font-weight:600;
+    font-size:clamp(1.3rem, 3vw, 1.7rem); color:#3C4E34; text-align:center;
+  }
+  .fb-card svg{ width:24px; height:24px; color:var(--ok-ink); flex:0 0 auto; }
+  .fb-exp{ max-width:560px; color:var(--muted); font-size:.95rem; }
+  .fb-exp .ex{ color:var(--accent-dark); font-weight:700; }
+
+  /* ---------- результаты ---------- */
+  .result{
+    display:flex; flex-direction:column; align-items:center; gap:13px; text-align:center;
+    padding:38px 24px; border:1.5px dashed #E0BFA6; border-radius:20px;
+    background:linear-gradient(180deg, #FDF7ED, #FAF0E0);
+  }
+  .result h3{ font-size:1.8rem; font-weight:600; }
+  .sparkle-row{ display:flex; gap:10px; }
+  .sparkle-row svg{ width:20px; height:20px; color:#D8A852; animation:twinkle 1.8s ease infinite; }
+  .sparkle-row svg:nth-child(2){ animation-delay:.4s; width:26px; height:26px; }
+  .sparkle-row svg:nth-child(3){ animation-delay:.8s; }
+  @keyframes twinkle{ 0%,100%{ opacity:.5; transform:scale(.9);} 50%{ opacity:1; transform:scale(1.1);} }
+
+  .big-time{ font-family:var(--font-head); font-weight:700; font-size:clamp(2.2rem, 6vw, 3rem); color:var(--accent-dark); line-height:1.1; }
+  .stars{ display:flex; gap:8px; margin-top:2px; }
+  .rstar{ width:40px; height:40px; fill:none; stroke:#D9CFC2; stroke-width:1.4; }
+  .rstar.on{ fill:#E7BC5F; stroke:#C99A3E; animation:starpop .5s ease backwards; }
+  @keyframes starpop{ 0%{ transform:scale(0) rotate(-30deg);} 70%{ transform:scale(1.25);} 100%{ transform:scale(1);} }
+  .result .msg{ color:var(--muted); max-width:440px; }
+  .ring-wrap svg{ display:block; }
+  .ring-detail{ font-size:.95rem; color:var(--muted); font-weight:700; }
+
+  .remind{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; background:var(--warn-soft); border:1px solid #E7D5A9; padding:22px 28px; }
+  .remind-ico{
+    flex:0 0 auto; width:52px; height:52px; border-radius:50%;
+    background:#FBF3DE; border:1px solid #E7D5A9;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .remind-ico svg{ width:25px; height:25px; color:var(--warn-ink); }
+  .remind p{ flex:1; min-width:220px; color:#6E5A2E; }
+  .remind b{ color:#5C4A21; }
+  .remind-plane svg{ width:26px; height:26px; color:var(--accent-dark); }
+
+  footer{ display:flex; align-items:center; justify-content:center; gap:12px; padding:14px 0 26px; }
+  footer .hand{ font-size:1.9rem; font-weight:700; transform:rotate(-1.5deg); }
+  footer svg{ width:20px; height:20px; color:var(--accent); }
+  footer .heart{ animation:beat 1.6s ease infinite; }
+  @keyframes beat{ 0%,100%{ transform:scale(1);} 12%{ transform:scale(1.22);} 24%{ transform:scale(1);} }
+
+  @media (max-width:640px){
+    .card{ padding:24px 20px; }
+    .cover{ padding:30px 22px; }
+    .d-mountain{ display:none; }
+    .block-head{ flex-direction:column; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    *, *::before, *::after{ animation:none !important; transition:none !important; }
+    .reveal{ opacity:1; transform:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-layer"></div>
+<div class="bg-overlay"></div>
+
+<div class="container">
+
+  <!-- ================= ШАПКА ================= -->
+  <header class="card cover reveal">
+    <svg class="doodle d-bulb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1 2V17h5.2v-.2c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/>
+    </svg>
+    <svg class="doodle d-mountain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M2.5 19 9.5 6.5l4.3 7.1 2.8-4.2 4.9 9.6Z"/><circle cx="19" cy="4.6" r="2"/>
+    </svg>
+    <svg class="doodle d-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <circle cx="12" cy="12" r="4.2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1"/>
+    </svg>
+
+    <div class="cover-top">
+      <span class="tag">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        Английский язык
+      </span>
+      <span class="date" id="dateNow"></span>
+    </div>
+
+    <div>
+      <h1>Домашняя работа</h1>
+      <svg class="squiggle" width="200" height="14" viewBox="0 0 200 14" fill="none">
+        <path d="M3 9 Q 15 1 27 9 T 51 9 T 75 9 T 99 9 T 123 9 T 147 9 T 171 9 T 195 9" stroke="#C97B5B" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+      <span class="for-note">для Алексея</span>
+    </div>
+
+    <p class="lead">Сегодня два задания: сначала <b>собери все пары слов</b> на скорость, а потом <b>успей ответить</b> — предлоги времени <b>at / in / on</b> и множественное число существительных.</p>
+
+    <div class="chips">
+      <span class="chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="3.5" width="12.5" height="16.5" rx="2.2"/><path d="M5.5 6.8H5a2 2 0 0 0-2 2v9.7a2 2 0 0 0 2 2h9.3"/></svg>
+        11 пар слов
+      </span>
+      <span class="chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.6"/><path d="M12 7.6V12l2.9 1.9"/></svg>
+        22 задания на время
+      </span>
+      <span class="chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg>
+        примерно 15 минут
+      </span>
+    </div>
+  </header>
+
+  <!-- ================= ШАГИ ================= -->
+  <div class="steps reveal">
+    <div class="step">
+      <div class="step-ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="3.5" width="12.5" height="16.5" rx="2.2"/><path d="M5.5 6.8H5a2 2 0 0 0-2 2v9.7a2 2 0 0 0 2 2h9.3"/></svg>
+      </div>
+      <div>
+        <div class="step-over">шаг 1</div>
+        <h3>Найди пары</h3>
+        <p>Открывай карточки и соединяй слово с его определением. Таймер идёт!</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.6"/><path d="M12 7.6V12l2.9 1.9"/></svg>
+      </div>
+      <div>
+        <div class="step-over">шаг 2</div>
+        <h3>Успей ответить</h3>
+        <p>Предлоги времени и множественное число — полоска времени тает!</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7.5" width="18" height="12.5" rx="2.5"/><path d="M8.3 7.5l1.4-2.3h4.6l1.4 2.3"/><circle cx="12" cy="13.5" r="3.4"/></svg>
+      </div>
+      <div>
+        <div class="step-over">шаг 3</div>
+        <h3>Отправь результат</h3>
+        <p>Сделай скриншот готовой страницы и отправь его в Telegram.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= БЛОК 1: MEMORY ================= -->
+  <section class="card block reveal" id="block1">
+    <div class="block-head">
+      <div class="block-title-row">
+        <div class="block-badge">1</div>
+        <div>
+          <div class="block-overline">лексика · игра на скорость</div>
+          <h2>Найди пары</h2>
+          <p class="block-sub">Открывай карточки по две и соединяй слово с его определением.</p>
+        </div>
+      </div>
+      <div class="head-chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.6"/><path d="M12 7.6V12l2.9 1.9"/></svg>
+        <span id="memTimeText">00:00</span>
+      </div>
+    </div>
+
+    <div class="start-screen" id="memStart">
+      <div class="start-ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="3.5" width="12.5" height="16.5" rx="2.2"/><path d="M5.5 6.8H5a2 2 0 0 0-2 2v9.7a2 2 0 0 0 2 2h9.3"/></svg>
+      </div>
+      <p class="note">22 карточки · 11 пар «слово — определение» · таймер стартует сразу</p>
+      <button class="btn btn-primary" onclick="startMemory()">
+        Начать игру
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+      <p class="hand g-hint">постарайся как можно быстрее!</p>
+    </div>
+
+    <div class="hidden" id="memGame">
+      <div class="mem-stats">
+        <span>Найдено <b id="memPairs">0</b> из 11 пар</span>
+        <div class="mini-track"><div class="mini-fill" id="memBar"></div></div>
+      </div>
+      <div class="mem-grid" id="memGrid"></div>
+    </div>
+
+    <div class="result hidden" id="memResult">
+      <div class="sparkle-row">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg>
+      </div>
+      <h3>Все пары найдены!</h3>
+      <div class="big-time" id="memFinalTime">0 с</div>
+      <div class="stars" id="memStars"></div>
+      <p class="msg" id="memMsg"></p>
+    </div>
+  </section>
+
+  <!-- ================= БЛОК 2: НА ВРЕМЯ ================= -->
+  <section class="card block reveal" id="block2">
+    <div class="block-head">
+      <div class="block-title-row">
+        <div class="block-badge">2</div>
+        <div>
+          <div class="block-overline">грамматика · на время</div>
+          <h2>Успей ответить</h2>
+          <p class="block-sub">Предлоги времени at / in / on и множественное число. На каждое задание — своя полоска времени!</p>
+        </div>
+      </div>
+      <div class="head-chip" id="taskChip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.6"/><path d="M12 7.6V12l2.9 1.9"/></svg>
+        <span id="taskChipText">—</span>
+      </div>
+    </div>
+
+    <div id="cheatBox">
+      <div class="cheat">
+        <div class="cheat-col">
+          <div class="cheat-title">Предлоги времени</div>
+          <div class="cheat-line"><b>at</b><span>точное время и особые: <span class="ex">at 7 o'clock, at noon, at midnight, at night</span></span></div>
+          <div class="cheat-line"><b>on</b><span>дни и даты: <span class="ex">on Monday, on 1 September, on my birthday, on Friday evening</span></span></div>
+          <div class="cheat-line"><b>in</b><span>месяцы, сезоны, годы, части дня: <span class="ex">in May, in summer, in 2025, in the morning</span></span></div>
+        </div>
+        <div class="cheat-col">
+          <div class="cheat-title">Множественное число</div>
+          <div class="cheat-line"><b>+s</b><span>обычно: <span class="ex">cat → cats</span> · после -s, -ss, -sh, -ch, -x, -z → <span class="ex">+es</span>: <span class="ex">watch → watches</span></span></div>
+          <div class="cheat-line"><b>+y</b><span>согл. + y → <span class="ex">-ies</span> (city → cities) · гласн. + y → <span class="ex">+s</span> (boy → boys)</span></div>
+          <div class="cheat-line"><b>-ves</b><span>-f / -fe → <span class="ex">knife → knives</span> · искл.: <span class="ex">roof → roofs, chief → chiefs</span> · согл. + o → <span class="ex">+es</span> (potato → potatoes), искл.: <span class="ex">photo → photos, piano → pianos</span></span></div>
+          <div class="cheat-line"><b>!</b><span>запомнить: <span class="ex">man → men, child → children, tooth → teeth, mouse → mice, person → people</span> · не меняется: <span class="ex">sheep, fish, deer</span></span></div>
+        </div>
+      </div>
+      <div class="start-screen" style="padding-top:20px">
+        <button class="btn btn-primary" onclick="startBlock2()">
+          Начать тренировку
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+        <p class="hand g-hint">сначала думай, потом нажимай!</p>
+      </div>
+    </div>
+
+    <!-- фаза: задание -->
+    <div class="hidden" id="taskGame">
+      <div class="g-top">
+        <span class="step-chip" id="tStep">1 / 22</span>
+        <span class="task-chip chip-prep hidden" id="chipPrep">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.6"/><path d="M12 7.6V12l2.9 1.9"/></svg>
+          Предлог времени: at / in / on
+        </span>
+        <span class="task-chip chip-plur hidden" id="chipPlur">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="3.5" width="12.5" height="16.5" rx="2.2"/><path d="M5.5 6.8H5a2 2 0 0 0-2 2v9.7a2 2 0 0 0 2 2h9.3"/></svg>
+          Множественное число
+        </span>
+      </div>
+      <div class="g-progress"><div class="mini-track"><div class="mini-fill" id="tBar"></div></div></div>
+
+      <!-- предлог -->
+      <div id="prepArea">
+        <div class="sentence"><span class="gap"></span><span id="pAfter">Monday</span></div>
+        <div class="prep-row">
+          <button class="btn-prep" onclick="answerPrep('at')">at</button>
+          <button class="btn-prep" onclick="answerPrep('in')">in</button>
+          <button class="btn-prep" onclick="answerPrep('on')">on</button>
+        </div>
+        <div class="g-center" style="margin-top:14px"><p class="hand g-hint">выбери нужный предлог!</p></div>
+      </div>
+
+      <!-- множественное число -->
+      <div id="plurArea" class="hidden">
+        <div class="sentence">one <span class="sing-word" id="mSing">knife</span> <span class="arrow">→</span> two <span class="gap"></span></div>
+        <div class="ans-row">
+          <input class="ans-input" id="mInput" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="пиши здесь">
+          <button class="btn btn-primary" onclick="checkPlural()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5l5 5 10-11"/></svg>
+            Проверить
+          </button>
+        </div>
+        <div class="g-center" style="margin-top:10px"><p class="hand g-hint">вспомни правило и напиши форму!</p></div>
+      </div>
+
+      <div class="time-row">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.6"/><path d="M12 7.6V12l2.9 1.9"/></svg>
+        <div class="time-track"><div class="time-fill" id="tFill"></div></div>
+        <span class="time-sec" id="tSecs">10 с</span>
+      </div>
+    </div>
+
+    <!-- фаза: разбор -->
+    <div class="fb-wrap hidden" id="taskFeedback">
+      <div class="status-chip ok" id="fbStatus">Верно!</div>
+      <div class="fb-card">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5l5 5 10-11"/></svg>
+        <span id="fbAnswer">on Monday</span>
+      </div>
+      <p class="fb-exp" id="fbExp"></p>
+      <button class="btn btn-primary" onclick="nextTask()">
+        Дальше
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+    </div>
+
+    <!-- результат блока -->
+    <div class="result hidden" id="taskResult">
+      <div class="ring-wrap">
+        <svg width="158" height="158" viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="50" fill="none" stroke="#EFE3D1" stroke-width="11"/>
+          <circle id="tRingFill" cx="60" cy="60" r="50" fill="none" stroke="#A9BFA0" stroke-width="11" stroke-linecap="round"
+                  stroke-dasharray="314.16" stroke-dashoffset="314.16" transform="rotate(-90 60 60)"/>
+          <text id="tRingVal" x="60" y="66" text-anchor="middle" font-size="30" font-weight="700" fill="#3A3532" font-family="Playfair Display, Georgia, serif">0</text>
+          <text x="60" y="84" text-anchor="middle" font-size="11" fill="#6B625C">из 22</text>
+        </svg>
+      </div>
+      <h3 id="tTitle">Отлично!</h3>
+      <p class="ring-detail" id="tDetail"></p>
+      <p class="msg" id="tMsg"></p>
+      <button class="btn btn-primary" onclick="restartBlock2()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        Повторить блок 2 ещё раз
+      </button>
+    </div>
+  </section>
+
+  <!-- ================= НАПОМИНАНИЕ ================= -->
+  <div class="card remind reveal">
+    <div class="remind-ico">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7.5" width="18" height="12.5" rx="2.5"/><path d="M8.3 7.5l1.4-2.3h4.6l1.4 2.3"/><circle cx="12" cy="13.5" r="3.4"/></svg>
+    </div>
+    <p><b>Не забудь:</b> когда оба задания будут готовы, сделай скриншот этой страницы с результатами и отправь его в Telegram.</p>
+    <div class="remind-plane">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg>
+    </div>
+  </div>
+
+  <footer class="reveal">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg>
+    <span class="hand">Made for Alexey with love</span>
+    <svg class="heart" viewBox="0 0 24 24" fill="currentColor"><path d="M12 20.7C6.4 16.7 3 13.2 3 9.6 3 7 5 5 7.6 5c1.8 0 3.4 1 4.4 2.6C13 6 14.6 5 16.4 5 19 5 21 7 21 9.6c0 3.6-3.4 7.1-9 11.1z"/></svg>
+  </footer>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  var SPARKLE = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg>';
+  var STAR = '<svg class="rstar" viewBox="0 0 24 24"><path d="M12 2.8l2.9 5.9 6.5.9-4.7 4.6 1.1 6.4L12 17.5l-5.8 3.1 1.1-6.4L2.6 9.6l6.5-.9z"/></svg>';
+
+  /* ================= ДАННЫЕ ================= */
+  var VOCAB = [
+    { w:'curiosity',      d:'wanting to know or learn about something' },
+    { w:'the loan',       d:'money you borrow from a bank, and you pay it back later' },
+    { w:'the willingness',d:'being happy and ready to do something' },
+    { w:'outdated',       d:'old, not modern, not useful anymore' },
+    { w:'apprenticeship', d:'a job where you learn skills while you work' },
+    { w:'entrepreneur',   d:'a person who starts their own business' },
+    { w:'on a whim',      d:'you do something suddenly, because you want to, not because you planned it' },
+    { w:'regret',         d:'to feel sad about something you did' },
+    { w:'spontaneous',    d:'doing something without a plan' },
+    { w:'gut feeling',    d:'a strong feeling inside you that something is true' },
+    { w:'hesitate',       d:'to wait before you do something, because you are not sure' }
+  ];
+
+  /* k: 'p' — предлог (10 с), 'm' — множественное число (20 с) */
+  var TASKS = [
+    { k:'p', after:"7 o'clock",    ans:'at', exp:'Точное время на часах — <span class="ex">at</span>: at 7 o\u2019clock, at half past six.' },
+    { k:'p', after:'Monday',       ans:'on', exp:'Дни недели — <span class="ex">on</span>: on Monday, on Friday.' },
+    { k:'p', after:'the morning',  ans:'in', exp:'Части дня — <span class="ex">in</span>: in the morning, in the afternoon, in the evening. Но: at night!' },
+    { k:'p', after:'night',        ans:'at', exp:'Исключение: ночь — всегда <span class="ex">at night</span>.' },
+    { k:'p', after:'1 September',  ans:'on', exp:'Даты — <span class="ex">on</span>: on 1 September, on the 5th of May.' },
+    { k:'p', after:'summer',       ans:'in', exp:'Сезоны — <span class="ex">in</span>: in summer, in winter.' },
+    { k:'p', after:'noon',         ans:'at', exp:'Устойчивые выражения с <span class="ex">at</span>: at noon, at midnight, at night.' },
+    { k:'p', after:'Friday evening', ans:'on', exp:'День + часть дня — всё равно <span class="ex">on</span>: on Friday evening, on Tuesday morning.' },
+    { k:'p', after:'May',          ans:'in', exp:'Месяцы — <span class="ex">in</span>: in May, in December.' },
+    { k:'p', after:'my birthday',  ans:'on', exp:'Конкретный день — <span class="ex">on</span>: on my birthday, on New Year\u2019s Day.' },
+    { k:'m', sing:'bus',     ans:'buses',    exp:'После -s, -ss, -sh, -ch, -x, -z добавляем <span class="ex">-es</span>: bus → buses.' },
+    { k:'m', sing:'watch',   ans:'watches',  exp:'После -ch добавляем <span class="ex">-es</span>: watch → watches, box → boxes.' },
+    { k:'m', sing:'city',    ans:'cities',   exp:'Согласная + y → y меняется на <span class="ex">-ies</span>: city → cities, baby → babies.' },
+    { k:'m', sing:'boy',     ans:'boys',     exp:'Гласная + y → просто <span class="ex">+s</span>: boy → boys, day → days.' },
+    { k:'m', sing:'knife',   ans:'knives',   exp:'-f / -fe → часто <span class="ex">-ves</span>: knife → knives, leaf → leaves, wife → wives.' },
+    { k:'m', sing:'roof',    ans:'roofs',    exp:'Исключение: <span class="ex">roof → roofs</span> (а также chief → chiefs).' },
+    { k:'m', sing:'potato',  ans:'potatoes', exp:'Согласная + o → часто <span class="ex">-es</span>: potato → potatoes, tomato → tomatoes.' },
+    { k:'m', sing:'photo',   ans:'photos',   exp:'Исключение: <span class="ex">photo → photos</span> (а также piano → pianos).' },
+    { k:'m', sing:'man',     ans:'men',      exp:'Неправильные: <span class="ex">man → men</span>, woman → women.' },
+    { k:'m', sing:'child',   ans:'children', exp:'Неправильные: <span class="ex">child → children</span>, person → people.' },
+    { k:'m', sing:'sheep',   ans:'sheep',    exp:'Не меняется: <span class="ex">sheep, fish, deer</span>.' },
+    { k:'m', sing:'tooth',   ans:'teeth',    exp:'Неправильные: <span class="ex">tooth → teeth</span>, foot → feet.' }
+  ];
+
+  var P_TIME = 10, M_TIME = 20;
+
+  function $(id){ return document.getElementById(id); }
+  function show(el){ el.classList.remove('hidden'); }
+  function hide(el){ el.classList.add('hidden'); }
+  function shuffle(a){
+    var arr = a.slice();
+    for (var i = arr.length - 1; i > 0; i--){
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+    }
+    return arr;
+  }
+
+  $('dateNow').textContent = new Intl.DateTimeFormat('ru-RU', { day:'numeric', month:'long' }).format(new Date());
+
+  var reveals = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); }
+      });
+    }, { threshold:.1 });
+    reveals.forEach(function(el){ io.observe(el); });
+  } else {
+    reveals.forEach(function(el){ el.classList.add('in'); });
+  }
+
+  /* ================= БЛОК 1: MEMORY ================= */
+  var memStarted = false, memFinished = false;
+  var memFirst = null, memLock = false, memPairsFound = 0, memSeconds = 0, memTimer = null;
+
+  function fmtClock(s){
+    var m = Math.floor(s / 60), r = s % 60;
+    return (m < 10 ? '0' + m : m) + ':' + (r < 10 ? '0' + r : r);
+  }
+  function fmtNice(s){
+    var m = Math.floor(s / 60), r = s % 60;
+    return m > 0 ? m + ' мин ' + r + ' с' : r + ' с';
+  }
+
+  window.startMemory = function(){
+    memStarted = true;
+    hide($('memStart'));
+    show($('memGame'));
+
+    var deck = [];
+    VOCAB.forEach(function(w, i){
+      deck.push({ id:i, text:w.w, lang:'en' });
+      deck.push({ id:i, text:w.d, lang:'def' });
+    });
+
+    var grid = $('memGrid');
+    grid.innerHTML = '';
+    shuffle(deck).forEach(function(c){
+      var el = document.createElement('div');
+      el.className = 'mem-card';
+      el.dataset.id = c.id;
+      el.setAttribute('role', 'button');
+      el.setAttribute('aria-label', 'карточка');
+      el.tabIndex = 0;
+      el.innerHTML =
+        '<div class="mem-inner">' +
+          '<div class="mem-face mem-front">' + SPARKLE + '</div>' +
+          '<div class="mem-face mem-back">' +
+            '<span class="dot ' + c.lang + '"></span>' +
+            '<span class="mem-word ' + c.lang + '">' + c.text + '</span>' +
+          '</div>' +
+        '</div>';
+      el.addEventListener('click', function(){ onMemClick(el); });
+      el.addEventListener('keydown', function(e){
+        if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); onMemClick(el); }
+      });
+      grid.appendChild(el);
+    });
+
+    memPairsFound = 0; memFirst = null; memLock = false; memSeconds = 0;
+    $('memTimeText').textContent = '00:00';
+    updateMemStats();
+
+    clearInterval(memTimer);
+    memTimer = setInterval(function(){
+      memSeconds++;
+      $('memTimeText').textContent = fmtClock(memSeconds);
+    }, 1000);
+  };
+
+  function updateMemStats(){
+    $('memPairs').textContent = memPairsFound;
+    $('memBar').style.width = (memPairsFound / VOCAB.length * 100) + '%';
+  }
+
+  function onMemClick(card){
+    if (memLock) return;
+    if (card.classList.contains('matched') || card.classList.contains('flipped')) return;
+
+    card.classList.add('flipped');
+    if (!memFirst){ memFirst = card; return; }
+
+    memLock = true;
+    var second = card, first = memFirst;
+
+    if (first.dataset.id === second.dataset.id){
+      setTimeout(function(){
+        first.classList.add('matched'); second.classList.add('matched');
+        first.classList.remove('flipped'); second.classList.remove('flipped');
+        memPairsFound++;
+        updateMemStats();
+        memFirst = null; memLock = false;
+        if (memPairsFound === VOCAB.length) finishMemory();
+      }, 380);
+    } else {
+      first.classList.add('shake'); second.classList.add('shake');
+      setTimeout(function(){
+        first.classList.remove('flipped', 'shake');
+        second.classList.remove('flipped', 'shake');
+        memFirst = null; memLock = false;
+      }, 950);
+    }
+  }
+
+  function finishMemory(){
+    clearInterval(memTimer);
+    memFinished = true;
+    setTimeout(function(){
+      hide($('memGame'));
+      show($('memResult'));
+      $('memFinalTime').textContent = fmtNice(memSeconds);
+
+      var n = memSeconds <= 75 ? 3 : (memSeconds <= 140 ? 2 : 1);
+      var html = '';
+      for (var i = 0; i < 3; i++){
+        html += STAR.replace('class="rstar"', 'class="rstar' + (i < n ? ' on' : '') + '" style="animation-delay:' + (i * 0.18) + 's"');
+      }
+      $('memStars').innerHTML = html;
+      $('memMsg').textContent =
+        n === 3 ? 'Вау, как быстро! Отличная память.' :
+        n === 2 ? 'Отличный результат! Слова уже почти твои.' :
+                  'Готово! Загляни в карточки ещё раз — и в следующий раз будет быстрее.';
+    }, 700);
+  }
+
+  /* ================= БЛОК 2: НА ВРЕМЯ ================= */
+  var t2Started = false, t2Finished = false;
+  var tOrder = [], tIdx = 0, tScore = 0;
+  var tTimer = null, tLeft = 0, tTotal = 0, tRevealed = false;
+
+  window.startBlock2 = function(){
+    t2Started = true; t2Finished = false;
+    tIdx = 0; tScore = 0;
+    tOrder = shuffle(TASKS.slice());
+    hide($('cheatBox'));
+    hide($('taskResult'));
+    showTask();
+  };
+
+  function showTask(){
+    tRevealed = false;
+    var it = tOrder[tIdx];
+
+    hide($('taskFeedback'));
+    show($('taskGame'));
+
+    $('tStep').textContent = (tIdx + 1) + ' / ' + tOrder.length;
+    $('tBar').style.width = ((tIdx + 1) / tOrder.length * 100) + '%';
+
+    if (it.k === 'p'){
+      show($('chipPrep')); hide($('chipPlur'));
+      show($('prepArea')); hide($('plurArea'));
+      $('pAfter').textContent = it.after;
+      tTotal = P_TIME;
+    } else {
+      hide($('chipPrep')); show($('chipPlur'));
+      hide($('prepArea')); show($('plurArea'));
+      $('mSing').textContent = it.sing;
+      var inp = $('mInput');
+      inp.value = ''; inp.disabled = false;
+      tTotal = M_TIME;
+      setTimeout(function(){ inp.focus(); }, 60);
+    }
+
+    startTTimer();
+  }
+
+  function startTTimer(){
+    tLeft = tTotal;
+    paintT();
+    clearInterval(tTimer);
+    tTimer = setInterval(function(){
+      tLeft -= 0.1;
+      if (tLeft <= 0){ tLeft = 0; paintT(); clearInterval(tTimer); revealTask(null, true); return; }
+      paintT();
+    }, 100);
+  }
+
+  function paintT(){
+    var secs = Math.ceil(tLeft);
+    var low = tLeft <= 5;
+    $('tFill').style.width = (tLeft / tTotal * 100) + '%';
+    $('tFill').classList.toggle('low', low);
+    $('tSecs').textContent = secs + ' с';
+    $('tSecs').classList.toggle('low', low);
+    $('taskChipText').textContent = secs + ' с';
+    $('taskChip').classList.toggle('low', low);
+  }
+
+  window.answerPrep = function(val){
+    if (tRevealed) return;
+    clearInterval(tTimer);
+    revealTask(val, false);
+  };
+
+  window.checkPlural = function(){
+    if (tRevealed) return;
+    clearInterval(tTimer);
+    revealTask($('mInput').value, false);
+  };
+
+  function revealTask(userVal, timeout){
+    if (tRevealed) return;
+    tRevealed = true;
+    var it = tOrder[tIdx];
+
+    var correct;
+    var answerText;
+    if (it.k === 'p'){
+      correct = !timeout && userVal === it.ans;
+      answerText = it.ans + ' ' + it.after;
+    } else {
+      var u = String(userVal || '').trim().toLowerCase();
+      correct = !timeout && u === it.ans.toLowerCase();
+      answerText = it.sing + ' → ' + it.ans;
+      $('mInput').disabled = true;
+    }
+
+    if (correct) tScore++;
+
+    var st = $('fbStatus');
+    if (correct){ st.textContent = 'Верно!'; st.className = 'status-chip ok'; }
+    else if (timeout){ st.textContent = 'Время вышло!'; st.className = 'status-chip warn'; }
+    else { st.textContent = 'Ошибка'; st.className = 'status-chip bad'; }
+
+    $('fbAnswer').textContent = answerText;
+    $('fbExp').innerHTML = it.exp;
+
+    hide($('taskGame'));
+    show($('taskFeedback'));
+  }
+
+  window.nextTask = function(){
+    tIdx++;
+    if (tIdx >= tOrder.length){ finishBlock2(); }
+    else { showTask(); }
+  };
+
+  function finishBlock2(){
+    clearInterval(tTimer);
+    t2Finished = true;
+
+    hide($('taskGame'));
+    hide($('taskFeedback'));
+    show($('taskResult'));
+
+    $('taskChipText').textContent = 'готово';
+    $('taskChip').classList.remove('low');
+
+    var total = tOrder.length;
+    $('tRingVal').textContent = tScore;
+    $('tDetail').textContent = 'Верных ответов: ' + tScore + ' · Ошибок и просроченных: ' + (total - tScore);
+
+    var title, msg, color;
+    if (tScore === total){
+      title = 'Идеально!'; msg = 'Все 22 из 22 — предлоги и множественное число тебе покорились!'; color = '#A9BFA0';
+    } else if (tScore >= 18){
+      title = 'Отлично!'; msg = 'Совсем чуть-чуть до идеала. Можешь повторить для уверенности.'; color = '#A9BFA0';
+    } else if (tScore >= 13){
+      title = 'Хорошая работа!'; msg = 'Уже неплохо! Нажми «повторить», чтобы закрепить правила.'; color = '#E8C989';
+    } else {
+      title = 'Почти получилось!'; msg = 'Загляни в шпаргалку выше и попробуй ещё раз — всё получится.'; color = '#D98B7A';
+    }
+    $('tTitle').textContent = title;
+    $('tMsg').textContent = msg;
+
+    var ring = $('tRingFill');
+    var C = 314.16;
+    ring.setAttribute('stroke', color);
+    ring.style.transition = 'none';
+    ring.setAttribute('stroke-dashoffset', C);
+    setTimeout(function(){
+      ring.style.transition = 'stroke-dashoffset 1.1s ease';
+      ring.setAttribute('stroke-dashoffset', C * (1 - tScore / total));
+    }, 120);
+  }
+
+  window.restartBlock2 = function(){
+    startBlock2();
+    document.getElementById('block2').scrollIntoView({ behavior:'smooth', block:'start' });
+  };
+
+  /* Enter — проверить множественное число */
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Enter' && e.target && e.target.id === 'mInput'){
+      e.preventDefault();
+      window.checkPlural();
+    }
+  });
+
+  window.addEventListener('beforeunload', function(e){
+    var inProgress = (memStarted && !memFinished) || (t2Started && !t2Finished);
+    if (inProgress){ e.preventDefault(); e.returnValue = ''; }
+  });
+
+})();
+</script>
+
+</body>
+</html>
