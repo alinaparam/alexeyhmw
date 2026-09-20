@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Homework · Vocabulary</title>
+<style>
+  @font-face { font-family:'Georgia'; src: local('Georgia'); }
+  :root {
+    --bg:#F5F1FA; --card:#FFFFFF; --purple:#9B7BB8; --purple-dark:#7A5A96; --purple-light:#E8DFF5;
+    --ink:#3A3245; --ink-soft:#75697F; --line:#E2D8ED;
+    --green:#A9BFA0; --yellow:#E8C989; --red:#D98B7A; --lilac:#C9B8E0;
+  }
+  * { box-sizing:border-box; }
+  body {
+    margin:0; font-family:'DejaVu Sans', sans-serif; color:var(--ink); font-size:17px;
+    background:
+      radial-gradient(circle at 10% 10%, rgba(155,123,184,0.10) 0%, transparent 40%),
+      radial-gradient(circle at 90% 20%, rgba(201,184,224,0.14) 0%, transparent 40%),
+      radial-gradient(circle at 50% 95%, rgba(155,123,184,0.08) 0%, transparent 45%),
+      var(--bg);
+    display:flex; justify-content:center; padding:30px 18px 100px 18px; min-height:100vh;
+  }
+  .app { width:100%; max-width:980px; }
+
+  .topbar {
+    position:sticky; top:14px; z-index:40; background:rgba(255,255,255,0.95); backdrop-filter:blur(10px);
+    border:2px solid var(--line); border-radius:24px; padding:16px 24px; margin-bottom:26px;
+    display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
+    box-shadow:0 10px 30px rgba(122,90,150,0.10);
+  }
+  .brand { display:flex; align-items:center; gap:14px; }
+  .brand-icon {
+    width:44px; height:44px; border-radius:50%; background:linear-gradient(135deg, var(--purple), var(--lilac));
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .brand-icon svg { width:24px; height:24px; }
+  .brand-text { font-family:'Georgia',serif; font-weight:700; font-size:20px; }
+  .brand-sub { font-size:13px; color:var(--ink-soft); }
+  .score-chip {
+    background:linear-gradient(135deg, var(--purple), var(--purple-dark)); color:#fff; font-weight:700;
+    font-size:15px; padding:11px 22px; border-radius:18px; box-shadow:0 6px 16px rgba(155,123,184,0.35);
+  }
+
+  .nav-menu { display:flex; gap:9px; flex-wrap:wrap; margin-bottom:30px; justify-content:center; }
+  .nav-menu button {
+    background:var(--card); border:2px solid var(--line); border-radius:16px; padding:10px 18px;
+    font-size:14.5px; font-weight:700; color:var(--ink-soft); cursor:pointer; font-family:inherit;
+    transition:all .18s ease;
+  }
+  .nav-menu button.active { background:linear-gradient(135deg, var(--purple), var(--purple-dark)); border-color:transparent; color:#fff; box-shadow:0 6px 14px rgba(155,123,184,0.3); }
+  .nav-menu button:hover:not(.active) { border-color:var(--purple); color:var(--purple-dark); transform:translateY(-2px); }
+
+  .page-view { display:none; }
+  .page-view.active { display:block; animation:fadeSlide .35s ease; }
+  @keyframes fadeSlide { from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
+
+  .card {
+    background:var(--card); border:2px solid var(--line); border-radius:30px; padding:38px 40px 42px 40px;
+    position:relative; overflow:hidden; box-shadow:0 18px 46px rgba(122,90,150,0.08);
+  }
+  .card::before {
+    content:''; position:absolute; top:-70px; right:-70px; width:220px; height:220px; border-radius:50%;
+    background:radial-gradient(circle, rgba(201,184,224,0.22), transparent 70%);
+  }
+  .deco-line { width:60px; height:5px; border-radius:4px; background:linear-gradient(90deg, var(--purple), var(--lilac)); margin-bottom:20px; }
+  .eyebrow { font-size:13px; letter-spacing:2.5px; text-transform:uppercase; color:var(--purple-dark); font-weight:700; margin-bottom:10px; }
+  h1 { font-family:'Georgia',serif; font-size:34px; margin:0 0 12px 0; font-weight:700; line-height:1.2; position:relative; z-index:1; }
+  .subtitle { font-size:17px; color:var(--ink-soft); line-height:1.7; margin-bottom:8px; position:relative; z-index:1; }
+  .key { color:var(--purple-dark); font-weight:700; }
+
+  .rule-box {
+    background:linear-gradient(135deg, var(--purple-light), #F0E9F8); border:2px solid var(--lilac); border-radius:22px;
+    padding:22px 26px; margin:18px 0 26px 0; font-size:16.5px; line-height:1.8; position:relative; z-index:1;
+  }
+  .warn-box {
+    background:linear-gradient(135deg, #F7E4DE, #F3D9D0); border:2px solid var(--red); border-radius:22px;
+    padding:18px 24px; margin:16px 0; font-size:15.5px; line-height:1.7; position:relative; z-index:1;
+  }
+
+  .q-block {
+    background:#FCFAFF; border:2px solid var(--line); border-radius:20px; padding:20px 24px; margin-bottom:16px;
+  }
+  .q-text { font-size:18px; line-height:1.65; margin-bottom:12px; }
+  .gapline { display:inline-block; min-width:70px; border-bottom:3px solid var(--purple); text-align:center; }
+
+  .options { display:flex; gap:10px; flex-wrap:wrap; }
+  .opt-btn {
+    background:#fff; border:2px solid var(--line); border-radius:14px; padding:9px 20px;
+    font-size:16px; font-weight:700; cursor:pointer; font-family:inherit; color:var(--ink);
+    transition:all .15s ease;
+  }
+  .opt-btn:hover { border-color:var(--purple); transform:translateY(-2px); }
+  .opt-btn.correct { background:linear-gradient(135deg, var(--green), #B9CBB1); border-color:transparent; color:#fff; }
+  .opt-btn.incorrect { background:linear-gradient(135deg, var(--red), #E3A99B); border-color:transparent; color:#fff; }
+  .opt-btn.disabled { cursor:default; opacity:.6; }
+  .opt-btn.correct.disabled, .opt-btn.incorrect.disabled { opacity:1; }
+
+  .type-row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  .type-input {
+    border:2px solid var(--line); border-radius:14px; padding:10px 16px; font-size:16px;
+    font-family:inherit; width:220px; background:#FCFAFF;
+  }
+  .type-input:focus { outline:none; border-color:var(--purple); background:#fff; }
+  .check-btn {
+    background:linear-gradient(135deg, var(--purple), var(--purple-dark)); color:#fff; border:none; border-radius:14px;
+    padding:10px 22px; font-size:15px; font-weight:700; cursor:pointer; font-family:inherit;
+  }
+  .check-btn:hover { filter:brightness(1.06); }
+  .check-btn:disabled { opacity:.5; cursor:default; }
+  .feedback { font-size:15px; font-weight:700; }
+  .feedback.ok { color:#5C8A5C; }
+  .feedback.bad { color:#B5544A; }
+
+  .task-title {
+    font-size:17px; font-weight:700; color:var(--purple-dark); margin:28px 0 15px 0;
+    display:flex; align-items:center; gap:10px; position:relative; z-index:1;
+  }
+  .task-title .tnum { background:var(--lilac); color:#fff; border-radius:10px; padding:4px 12px; font-size:14px; }
+
+  .word-bank { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:20px; position:relative; z-index:1; }
+  .word-bank span {
+    background:var(--purple-light); border:2px solid var(--lilac); border-radius:16px; padding:7px 16px;
+    font-size:15.5px; font-weight:700; color:var(--purple-dark);
+  }
+
+  .nav-buttons { display:flex; justify-content:space-between; margin-top:30px; position:relative; z-index:1; }
+  .nav-btn {
+    background:linear-gradient(135deg, var(--purple), var(--purple-dark)); color:#fff; border:none; padding:14px 30px;
+    border-radius:22px; font-weight:700; cursor:pointer; font-family:inherit; font-size:16.5px;
+    box-shadow:0 8px 18px rgba(155,123,184,0.3);
+  }
+  .nav-btn:hover { filter:brightness(1.05); }
+  .nav-btn.secondary { background:#fff; border:2px solid var(--line); color:var(--ink-soft); box-shadow:none; }
+  .nav-btn.secondary:hover { border-color:var(--purple); color:var(--purple-dark); }
+
+  .start-btn {
+    display:block; margin:26px auto 0 auto; background:linear-gradient(135deg, var(--purple), var(--purple-dark)); color:#fff;
+    border:none; padding:16px 40px; border-radius:26px; font-weight:700; cursor:pointer; font-family:inherit;
+    font-size:18px; box-shadow:0 12px 28px rgba(155,123,184,0.35); position:relative; z-index:1;
+  }
+  .start-btn:hover { filter:brightness(1.05); }
+
+  .final-stats { text-align:center; position:relative; z-index:1; }
+  .final-stats .big-num { font-size:56px; font-weight:700; color:var(--purple-dark); font-family:'Georgia',serif; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M4 21V9l8-6 8 6v12" stroke="#fff" stroke-width="2.2" stroke-linejoin="round" fill="none"/><path d="M9 21v-6h6v6" stroke="#fff" stroke-width="2.2"/></svg></div>
+      <div><div class="brand-text">Vocabulary Practice</div><div class="brand-sub">Homework</div></div>
+    </div>
+    <div class="score-chip" id="globalScore">Score: 0 / 0</div>
+  </div>
+
+  <div class="nav-menu" id="navMenu"></div>
+  <div id="pagesRoot"></div>
+
+</div>
+
+<script>
+let totalScored = 0, totalCorrect = 0;
+function bumpScore(correct) {
+  totalScored++; if (correct) totalCorrect++;
+  document.getElementById('globalScore').textContent = 'Score: ' + totalCorrect + ' / ' + totalScored;
+  const fb = document.getElementById('finalScoreBig');
+  if (fb) fb.textContent = totalCorrect + ' / ' + totalScored;
+}
+function el(tag, cls, html) { const e = document.createElement(tag); if (cls) e.className = cls; if (html !== undefined) e.innerHTML = html; return e; }
+
+const PAGES = [
+  { id:'intro', label:'Start' },
+  { id:'match', label:'Match' },
+  { id:'gapfill', label:'Gap-fill' },
+  { id:'final', label:'Result' }
+];
+const navMenu = document.getElementById('navMenu');
+const pagesRoot = document.getElementById('pagesRoot');
+let currentPageIdx = 0;
+PAGES.forEach((p, i) => {
+  const btn = el('button', '', p.label);
+  btn.addEventListener('click', () => goToPage(i));
+  navMenu.appendChild(btn);
+  const view = el('div', 'page-view'); view.id = 'view-' + p.id; pagesRoot.appendChild(view);
+});
+function goToPage(idx) {
+  currentPageIdx = idx;
+  document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + PAGES[idx].id).classList.add('active');
+  document.querySelectorAll('.nav-menu button').forEach((b,i) => b.classList.toggle('active', i===idx));
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+function addFooterNav(container) {
+  const row = el('div', 'nav-buttons');
+  const prevBtn = el('button', 'nav-btn secondary', '← Back');
+  prevBtn.addEventListener('click', () => goToPage(Math.max(0, currentPageIdx-1)));
+  const nextBtn = el('button', 'nav-btn', 'Next →');
+  nextBtn.addEventListener('click', () => goToPage(Math.min(PAGES.length-1, currentPageIdx+1)));
+  row.appendChild(prevBtn); row.appendChild(nextBtn);
+  container.appendChild(row);
+}
+function cardShell(view, eyebrow, title, subtitleHtml) {
+  const card = el('div', 'card');
+  card.appendChild(el('div', 'deco-line'));
+  card.appendChild(el('div', 'eyebrow', eyebrow));
+  card.appendChild(el('h1', '', title));
+  if (subtitleHtml) card.appendChild(el('div', 'subtitle', subtitleHtml));
+  view.appendChild(card);
+  return card;
+}
+function taskTitle(container, num, text) {
+  container.appendChild(el('div', 'task-title', '<span class="tnum">' + num + '</span> ' + text));
+}
+function buildBlank(pre, post) { return pre + '<span class="gapline">&nbsp;</span>' + post; }
+function choiceCard(container, pre, post, options, correctIdx) {
+  const card = el('div', 'q-block');
+  card.appendChild(el('div', 'q-text', pre + (post!==undefined? buildBlank('', post) : '')));
+  const opts = el('div', 'options');
+  options.forEach((opt, idx) => {
+    const btn = el('button', 'opt-btn', opt);
+    btn.addEventListener('click', () => {
+      if (card.dataset.answered) return;
+      card.dataset.answered = '1';
+      const all = opts.querySelectorAll('.opt-btn');
+      all.forEach((b,i) => { b.classList.add('disabled'); if (i===correctIdx) b.classList.add('correct'); });
+      if (idx !== correctIdx) btn.classList.add('incorrect');
+      bumpScore(idx === correctIdx);
+    });
+    opts.appendChild(btn);
+  });
+  card.appendChild(opts);
+  container.appendChild(card);
+}
+function typeInCard(container, preHtml, correctAnswers) {
+  if (typeof correctAnswers === 'string') correctAnswers = [correctAnswers];
+  const card = el('div', 'q-block');
+  card.appendChild(el('div', 'q-text', preHtml));
+  const row = el('div', 'type-row');
+  const input = el('input', 'type-input'); input.type='text'; input.placeholder='type here';
+  const btn = el('button', 'check-btn', 'Check');
+  const fb = el('span', 'feedback', '');
+  function doCheck() {
+    if (card.dataset.answered) return;
+    card.dataset.answered = '1';
+    const val = input.value.trim().toLowerCase();
+    const isOk = correctAnswers.some(a => a.toLowerCase() === val);
+    input.disabled = true; btn.disabled = true;
+    if (isOk) { fb.textContent='✓ Correct!'; fb.classList.add('ok'); }
+    else { fb.textContent='✗ Correct: ' + correctAnswers.join(' / '); fb.classList.add('bad'); }
+    bumpScore(isOk);
+  }
+  btn.addEventListener('click', doCheck);
+  input.addEventListener('keydown', e => { if (e.key==='Enter') doCheck(); });
+  row.appendChild(input); row.appendChild(btn); row.appendChild(fb);
+  card.appendChild(row);
+  container.appendChild(card);
+}
+
+/* ============ WORD LIST ============ */
+const WORDS = [
+  ["superficial", "someone who cares mostly about looks, money, or other unimportant things"],
+  ["needy", "someone who needs a lot of attention, love, or help"],
+  ["emotionally mature", "someone who can understand and control their feelings"],
+  ["down-to-earth", "someone who is simple, friendly, and easy to talk to"],
+  ["clingy", "someone who wants to be with you all the time"],
+  ["high-maintenance", "someone who needs a lot of attention, time, or care"],
+  ["tell someone off", "to speak angrily to someone because they did something wrong"],
+  ["talk someone into something", "persuade someone to do something"],
+  ["to bottle things up", "to not talk about your feelings"],
+  ["to provide for your family", "to give your family money and things they need"],
+  ["to live up to expectations", "to be as good as people hoped or thought you would be"],
+  ["to put pressure on someone", "to make someone feel they must do something"],
+  ["willingness", "being happy and ready to do something"],
+  ["outdated", "old, not modern, not useful anymore"],
+  ["spontaneous", "doing something without a plan"],
+  ["gut feeling", "a strong feeling inside you that something is true"]
+];
+
+/* ============ INTRO ============ */
+{
+  const v = document.getElementById('view-intro');
+  const card = cardShell(v, 'Homework', 'Hello, Alexey!',
+    'Today\'s homework: review <span class="key">16 new words and expressions</span> — matching and gap-fill.');
+  card.appendChild(el('div', 'warn-box', '⚠️ Пройди всё целиком за один раз — <b>не перезагружай страницу и не закрывай вкладку</b>, иначе все ответы сбросятся.'));
+  card.appendChild(el('div', 'rule-box', '📸 После завершения сделай <b>скриншот страницы с результатами</b> и отправь его мне в <b>Telegram</b>.'));
+  const startBtn = el('button', 'start-btn', 'Start →');
+  startBtn.addEventListener('click', () => goToPage(1));
+  card.appendChild(startBtn);
+}
+
+/* ============ MATCH ============ */
+{
+  const v = document.getElementById('view-match');
+  const card = cardShell(v, 'Block 1', 'Match the Word to Its Meaning', 'For each word or expression, choose the correct definition.');
+
+  const bank = el('div', 'word-bank');
+  WORDS.forEach(([w]) => bank.appendChild(el('span','',w)));
+  card.appendChild(bank);
+
+  taskTitle(card, '1', 'Choose the correct meaning (16 items)');
+  WORDS.forEach(([word, def]) => {
+    const distractors = WORDS.filter(w => w[1] !== def).sort(()=>Math.random()-0.5).slice(0,3).map(w=>w[1]);
+    const opts = [def, ...distractors].sort(()=>Math.random()-0.5);
+    choiceCard(card, '<b>' + word + '</b>', undefined, opts, opts.indexOf(def));
+  });
+
+  addFooterNav(card);
+}
+
+/* ============ GAP-FILL ============ */
+{
+  const v = document.getElementById('view-gapfill');
+  const card = cardShell(v, 'Block 2', 'Fill the Gap', 'Type the correct word or expression from the list into each sentence.');
+
+  const bank = el('div', 'word-bank');
+  WORDS.forEach(([w]) => bank.appendChild(el('span','',w)));
+  card.appendChild(bank);
+
+  taskTitle(card, '1', 'Type the correct word or expression (16 sentences)');
+  const gaps = [
+    ["He seemed nice at first, but honestly, he was quite ", " — he only cared about money and how things looked.", ["superficial"]],
+    ["She's a bit ", " — she always needs constant attention and reassurance.", ["needy"]],
+    ["He handled the breakup really well; he's very ", " for his age.", ["emotionally mature"]],
+    ["I love how ", " she is — no drama, just a genuine, friendly person.", ["down-to-earth"]],
+    ["He got a bit ", " after a few dates — he wanted to see me every single day.", ["clingy"]],
+    ["She's quite ", " — she expects constant gifts and attention.", ["high-maintenance"]],
+    ["My boss decided to ", " in front of everyone, which was embarrassing.", ["tell me off","tell someone off"]],
+    ["It took a while, but she finally managed to ", " going on the trip.", ["talk him into","talk someone into something","talk him into it"]],
+    ["He tends to ", " instead of talking about how he really feels.", ["bottle things up","bottle it up"]],
+    ["He works two jobs just to ", ".", ["provide for his family"]],
+    ["She always tries to ", ".", ["live up to her parents' expectations","live up to expectations"]],
+    ["Please don't ", " to decide right now.", ["put pressure on me"]],
+    ["He showed real ", " to change and grow as a person.", ["willingness"]],
+    ["That way of thinking is pretty ", " — nobody believes that anymore.", ["outdated"]],
+    ["We didn't plan the trip at all — it was completely ", ".", ["spontaneous"]],
+    ["I had a strange ", " that something wasn't right, and I was correct.", ["gut feeling"]]
+  ];
+  gaps.forEach(([pre, post, ans]) => typeInCard(card, buildBlank(pre, post), ans));
+
+  addFooterNav(card);
+}
+
+/* ============ FINAL ============ */
+{
+  const v = document.getElementById('view-final');
+  const card = cardShell(v, 'The end', 'Well done! 🎉', '');
+  const finalStats = el('div', 'final-stats');
+  finalStats.innerHTML = '<div class="big-num" id="finalScoreBig">0 / 0</div><div style="color:var(--ink-soft); margin-top:8px;">correct answers across the whole homework</div>';
+  card.appendChild(finalStats);
+  card.appendChild(el('div', 'rule-box', 'Отличная работа над новыми словами и выражениями!'));
+  card.appendChild(el('div', 'warn-box', '📸 Сделай скриншот этой страницы с результатами и отправь его мне в Telegram.'));
+}
+
+goToPage(0);
+</script>
+</body>
+</html>
